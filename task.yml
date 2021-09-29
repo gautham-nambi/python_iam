@@ -7,21 +7,24 @@
       pkg: 
       - python3-pip
       - git
+
+- hosts: webservers
+  tasks:
   - name: Repo setup
     ansible.builtin.git:
       repo: git@github.com:gautham-nambi/python_iam.git
-      dest: "{{home}}/python_iam"
+      dest: "/home/ubuntu/python_iam"
       version: ansible-dev
+- hosts: webservers
+  tasks:
   - name: Module setup
     pip:
-      requirements: "{{ playbook_dir }}/requirements.txt"
+      requirements: "/home/ubuntu/python_iam/requirements.txt"
       executable: pip3
-  - name: AWS Setup
-    ansible.builtin.copy:
-      src: "{{playbook_dir}}/credentials"
-      dest: "{{home}}/.aws/credentials" 
   - name: Run server
     shell: "/usr/local/bin/gunicorn --bind 127.0.0.1:5000 app:app &"
     args:
-      chdir: "{{home}}/python_iam"
-  
+      chdir: "/home/ubuntu/python_iam"
+    environment:
+      AWS_ACCESS_KEY_ID=AKIAZZLFBIETOHJOWV4I
+      AWS_SECRET_ACCESS_KEY=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

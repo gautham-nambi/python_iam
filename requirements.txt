@@ -3,3 +3,4 @@ virtualenv
 Flask
 awscli
 boto3
+gunicorn
