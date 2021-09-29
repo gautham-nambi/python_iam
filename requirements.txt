@@ -1,3 +1,5 @@
+pip>=21.2.4
+virtualenv
 Flask
 awscli
 boto3

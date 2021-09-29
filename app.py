@@ -59,3 +59,6 @@ def get_user_access_key_details(username):
             details.append(det)
     
     return {'accessKeyDetails': details}
+
+if __name__ == "__main__":
+    app.run()

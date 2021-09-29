@@ -1,0 +1,27 @@
+- hosts: webservers
+  become: true
+  become_method: sudo
+  tasks:
+  - name: Pip setup
+    apt:
+      pkg: 
+      - python3-pip
+      - git
+  - name: Repo setup
+    ansible.builtin.git:
+      repo: git@github.com:gautham-nambi/python_iam.git
+      dest: "{{home}}/python_iam"
+      version: ansible-dev
+  - name: Module setup
+    pip:
+      requirements: "{{ playbook_dir }}/requirements.txt"
+      executable: pip3
+  - name: AWS Setup
+    ansible.builtin.copy:
+      src: "{{playbook_dir}}/credentials"
+      dest: "{{home}}/.aws/credentials" 
+  - name: Run server
+    shell: "/usr/local/bin/gunicorn --bind 127.0.0.1:5000 app:app &"
+    args:
+      chdir: "{{home}}/python_iam"
+  
