@@ -8,18 +8,30 @@
       - python3-pip
       - git
       - nginx
+  
+  - name: Create Known hosts
+    shell: "/usr/bin/touch ~/.ssh/known_hosts"
+  - name: SSH Known hosts setup
+    shell: "/usr/bin/ssh-keyscan -t rsa,dsa github.com 2>&1 | sort -u >> ~/.ssh/known_hosts"
+  
+  - name: Repo setup
+    ansible.builtin.git:
+      repo: git@github.com:gautham-nambi/python_iam.git
+      dest: "/home/ubuntu/python_iam"
+      version: ansible-dev
+
   - name: Nginx setup
     become: true
     become_method: sudo
     copy:
       remote_src: true
       src: /home/ubuntu/python_iam/nginx.conf
-      dest: /etc/nginx/nginx/nginx.conf
-  - name: Repo setup
-    ansible.builtin.git:
-      repo: git@github.com:gautham-nambi/python_iam.git
-      dest: "/home/ubuntu/python_iam"
-      version: ansible-dev
+      dest: /etc/nginx/nginx.conf
+    
+  - name: Nginx reload
+    become: true
+    become_method: sudo
+    shell: "/usr/sbin/nginx -s reload"
 
   - name: Module setup
     pip:
