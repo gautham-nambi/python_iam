@@ -42,6 +42,3 @@
     shell: "/usr/bin/python3 -m gunicorn --bind 127.0.0.1:5000 app:app &"
     args:
       chdir: "/home/ubuntu/python_iam"
-    environment:
-      AWS_ACCESS_KEY_ID: KEY_ID
-      AWS_SECRET_ACCESS_KEY: ACCESS_KEY
