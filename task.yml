@@ -43,5 +43,5 @@
     args:
       chdir: "/home/ubuntu/python_iam"
     environment:
-      AWS_ACCESS_KEY_ID: AKIAZZLFBIETOHJOWV4I
-      AWS_SECRET_ACCESS_KEY: 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
+      AWS_ACCESS_KEY_ID: KEY_ID
+      AWS_SECRET_ACCESS_KEY: ACCESS_KEY
