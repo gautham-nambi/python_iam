@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-app
+spec:
+  selector:
+    matchLabels:
+      run: flask-app
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: flask-app
+    spec:
+      containers:
+      - name: flask-app-cont
+        image: registry.hub.docker.com/gauthambstack/flask_iam:latest
+      ports:
+      - containerPort: 5000

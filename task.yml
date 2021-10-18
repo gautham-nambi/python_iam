@@ -4,6 +4,7 @@
     become: true
     become_method: sudo
     apt:
+      update_cache: yes
       pkg: 
       - python3-pip
       - git
