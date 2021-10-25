@@ -1,14 +1,14 @@
 - hosts: webservers
   tasks:
   - name: Create secrets
-    shell: "python3 {{playbook_dir}}/kube_deploy/template_render.py {{ playbook_dir }}/kube_deploy/aws-secrets.yaml.jinja2 | /usr/local/bin/kubectl apply -f -"
+    shell: "/usr/bin/python3 {{playbook_dir}}/kube_deploy/template_render.py aws-secrets.yaml.jinja2 | /usr/local/bin/kubectl apply -f -"
 
   - name: Create Pods
-    shell: "python3 {{playbook_dir}}/kube_deploy/template_render.py {{ playbook_dir }}/kube_deploy/app-deployment.yaml.jinja2 | /usr/local/bin/kubectl apply -f -"
+    shell: "/usr/bin/python3 {{playbook_dir}}/kube_deploy/template_render.py app-deployment.yaml.jinja2 | /usr/local/bin/kubectl apply -f -"
   
   - name: Create services
     
-    shell: "python3 {{playbook_dir}}/kube_deploy/template_render.py {{ playbook_dir }}/kube_deploy/app-service.yaml.jinja2 | /usr/local/bin/kubectl apply -f -"
+    shell: "/usr/bin/python3 {{playbook_dir}}/kube_deploy/template_render.py app-service.yaml.jinja2 | /usr/local/bin/kubectl apply -f -"
 
   - name: Start Ingress
-    shell: "/usr/local/bin/kubectl apply -f iam-ingress.yaml"
+    shell: "/usr/local/bin/kubectl apply -f {{playbook_dir}}/kube_deploy/iam-ingress.yaml"
