@@ -1,0 +1,7 @@
+aws_access_key: QUtJQVpaTEZCSUVUT0hKT1dWNEk=
+aws_secret_access_key: YmNRMDNvOS91QmVKQXdwUS9kUGU2VzBidUt6U2t4UlR2V3hKM1RxSg==
+image_tag: "latest"
+image: "flask_iam"
+registry: "registry.hub.docker.com/gauthambstack"
+namespace: "default"
+container_port: 5000

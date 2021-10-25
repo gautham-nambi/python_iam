@@ -13,7 +13,7 @@
   - name: Create Known hosts
     shell: "/usr/bin/touch ~/.ssh/known_hosts"
   - name: SSH Known hosts setup
-    shell: "/usr/bin/ssh-keyscan -t rsa,dsa github.com 2>&1 | sort -u >> ~/.ssh/known_hosts"
+    shell: "/usr/bin/ssh-keyscan -t rsa github.com 2>&1 | sort -u >> ~/.ssh/known_hosts"
   
   - name: Repo setup
     ansible.builtin.git:

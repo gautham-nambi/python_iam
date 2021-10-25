@@ -1,0 +1,60 @@
+- hosts: webservers
+  tasks:
+  - name: Add kubernetes Repo
+    become: true
+    become_method: sudo
+    ansible.builtin.apt_repository:
+      repo: deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main
+      state: present
+
+  - name: Add Docker Repo 
+    become: true
+    become_method: sudo
+    ansible.builtin.apt_repository:
+      repo: "deb [signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+      state: present
+
+  - name: PKG setup
+    become: true
+    become_method: sudo
+    apt:
+      update_cache: yes
+      pkg:
+      - ca-certificates
+      - curl
+      - gnupg
+      - lsb-release
+      - docker-ce 
+      - docker-ce-cli 
+      - containerd.io
+      - kubectl
+      - python3-pip
+
+  - name: download minikube
+    shell: "/usr/local/bin/curl -L0 https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64"
+  - name: Python setup
+    pip:
+      name:
+        - jinja2
+        - awscli
+
+  - name: Install minikube
+    become: true
+    become_method: sudo
+    shell: "install minikube-linux-amd64 /usr/local/bin/minikube"
+  
+  - name: minikube
+    shell: "/usr/local/bin/minikube start"
+
+  - name: Create secrets
+    shell: "python3 {{playbook_dir}}/kube_deploy/template_render.py {{ playbook_dir }}/kube_deploy/aws-secrets.yaml.jinja2 | /usr/local/bin/kubectl apply -f -"
+
+  - name: Create Pods
+    shell: "python3 {{playbook_dir}}/kube_deploy/template_render.py {{ playbook_dir }}/kube_deploy/app-deployment.yaml.jinja2 | /usr/local/bin/kubectl apply -f -"
+  
+  - name: Create services
+    
+    shell: "python3 {{playbook_dir}}/kube_deploy/template_render.py {{ playbook_dir }}/kube_deploy/app-service.yaml.jinja2 | /usr/local/bin/kubectl apply -f -"
+
+  - name: Start Ingress
+    shell: "/usr/local/bin/kubectl apply -f iam-ingress.yaml"
