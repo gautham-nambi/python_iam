@@ -1,6 +1,7 @@
 from flask import Blueprint
 from flask import jsonify
 import boto3
+from flask import send_file
 
 bp = Blueprint('aws_iam', __name__)
 
@@ -59,6 +60,15 @@ def get_user_access_key_details(username):
             details.append(det)
     
     return {'accessKeyDetails': details}
+
+@app.route('/get-object/', methods = ['GET'])
+def get_s3_obj():
+    s3 = boto3.client('s3')
+
+    with open('/tmp/s3_obj', 'wb') as data:
+        s3.download_fileobj('gautham-assignment-1', 'nginx.conf', data)
+
+    return send_file('/tmp/s3_obj')
 
 if __name__ == "__main__":
     app.run()
